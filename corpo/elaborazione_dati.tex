@@ -1,0 +1,257 @@
+\section{Elaborazione dati}
+Al fine di ottenere le dimensioni della poligonale, occorre elaborare i dati ricavati dalla rilevazione con la stazione totale.\\
+In questo capitolo verranno esposte le formule e le procedure, con cui sono stati effettuati i calcoli.\\
+I calcoli sono stati sviluppati con il programma LibreOffice Calc, ma per semplicità verranno esposti solamente i risultati.
+\subsection{Dati ricavati dal rilievo topografico}
+%\begin{table}[h]
+%\rotatebox[]{90}{
+%\begin{sideways} 
+\begin{tabular}{ p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm} }
+\toprule
+STAZIONE & ID PUNTO & ALTEZZA STAZIONE (m)   & ALTEZZA PRISMA (m) & LETTURA AL C.O. (gon) & LETTURA AL C.V. (gon) & DISTANZA INCLINATA (m) \\
+\midrule
+\multirow{2}{*}{100} & PI 500   & \multirow{2}{*}{1.507} & 2.00               & 82.3724               & 99.2434               & 46.398                 \\
+                     & PA 200   &                        & 2.00               & 166.8098              & 99.7678               & 119.389                \\
+\midrule
+\multirow{2}{*}{200} & PI 100   & \multirow{2}{*}{1.502} & 2.00               & 224.9866              & 99.7406               & 119.375                \\
+                     & PA 300   &                        & 2.00               & 309.3850              & 99.2836               & 51.853                 \\
+\midrule
+\multirow{2}{*}{300} & PI 200   & \multirow{2}{*}{1.464} & 2.00               & 115.4048              & 99.4574               & 51.859                 \\
+                     & PA 400   &                        & 2.00               & 215.6688              & 99.4774               & 61.878                 \\
+\midrule
+\multirow{2}{*}{400} & PI 300   & \multirow{2}{*}{1.431} & 2.00               & 138.5304              & 99.4076               & 61.886                 \\
+                     & PA 500   &                        & 2.00               & 370.5036              & 99.0058               & 36.736                 \\
+\midrule
+\multirow{2}{*}{500} & PI 400   & \multirow{2}{*}{1.490} & 2.00               & 70.5150               & 99.1548               & 36.739                 \\
+                     & PA 100   &                        & 2.00               & 169.4558              & 99.4324               & 46.406     \\           
+\bottomrule
+\end{tabular}
+%}
+%\end{table}
+%\end{sideways}
+\subsection{Calcolo degli angoli interni}
+Il calcolo degli angoli interni della poligonale avviene effettuando la differenza tra l'ampiezza dell'angolo riferita al punto avanti e tra quella riferita al punto indietro.\\
+In questo caso, si ottengono i seguenti valori angolari:
+\begin{table}[H] \centering
+\begin{tabular}{ccc}
+\toprule
+PUNTO & NOME ANGOLO             & ANGOLO INTERNO (gon) \\
+\midrule
+100   & $\alpha$   & 84.4374        \\
+200   & $\beta$    & 84.3983        \\
+300   & $\gamma$   & 100.2640       \\
+400   & $\delta$   & 231.9732       \\
+500   & $\epsilon$ & 98.9408       \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Calcolo dell'errore di chiusura angolare}
+Inevitabilmente, nel procedimento di rilevazione dei dati sono stati effettuati degli errori (siano questi causati dall'operatore o dallo strumento di misura).\\
+Al fine di migliorare i valori delle misure ricavate, occorre conoscere l'entità di questo errore angolare. Fortunatamente, la trigonometria permette di conoscere la somma degli angoli interni di un qualsiasi poligono, mediante la formula (in gon): $(n - 2) \cdot 200^c$, dove $n$ indica il numero di angoli del poligono.\\
+Quindi, la differenza tra la somma degli angoli interni della nostra poligonale ed il valore teorico, equivale all'errore di chiusura angolare. Tale valore si ricava mediante la seguente formula:
+\begin{equation} \label{errore_chiusura_angolare}
+    \pm \delta_\alpha = \left[ \alpha + \beta + \gamma + \delta + \epsilon \right] - \left[ (n - 2) \cdot 200^c\right]
+\end{equation}
+Nel caso di questa relazione, la somma degli angoli interni risulta pari a 600.01374 gon, mentre la somma degli angoli teorici risulta pari a 600 gon. La differenza tra i due valori (ovvero $\pm \delta_\alpha$) \label{delta_alpha} è 0.01374 gon.\\
+Essendo che le misure vengono svolte con lo stesso procedimento, è lecito supporre che gli errori vengano prodotti in modo costante ed uguale per ogni angolo; da questa supposizione è possibile equidistribuire l'errore angolare per ogni punto della poligonale.\\
+Quindi, ad ogni angolo verrà aggiunto (cambiando di segno) il valore di $\lambda$, calcolato mediante la seguente formula:
+\begin{equation} 
+    \lambda = - \frac{\pm \delta_\alpha}{N} \xrightarrow{} \lambda = - \frac{0.01374}{5} = 0.00275 \,gon
+\end{equation} 
+Gli angoli a cui è stato aggiunto tale valore prendono il nome di ``angoli compensati".
+
+\subsection{Calcolo della tolleranza angolare}
+Prima di continuare con la procedura di calcolo, risulta conveniente valutare il valore di tolleranza accettabile, specificatamente a questa poligonale.\\
+La tolleranza di misura angolare si ricava mediante la formula: 
+\begin{equation} \label{tolleranza_angolare}
+    T_\alpha = 0^c.025 \cdot\sqrt{N} \xrightarrow{} 0^c.025 \cdot \sqrt{5} = 0.05590 \,gon
+\end{equation}
+dove N rappresenta il numero di angoli della figura.\\
+Ovviamente, affinchè la misura possa essere considerata affidabile, occorre che le misurazioni abbiano prodotto un errore inferiore a quello indicato dalla tolleranza; questo concetto può essere riportato in questo modo:
+\begin{equation}
+    |\pm \delta_\alpha| \leq T_\alpha
+\end{equation}
+In questo caso ci si può considerare soddisfatti, essendo l'errore prodotto \ref{delta_alpha} di un ordine di grandezza inferiore rispetto alla tolleranza \ref{tolleranza_angolare}; in questo modo è possibile continuare la procedura di calcolo.
+
+
+% Come per le angolari, è necessario conoscere anche l'errore prodotto nelle misure lineari.\\
+% Lo scarto delle misure lineari riguarda sia le misure in $x$ che le in $y$;  \\
+
+% La tolleranza lineare viene calcolata mediante la seguente formula:
+% \begin{equation} \label{tolleranza_lineare}
+%     T_L = 0.025 \cdot \sqrt{L}
+% \end{equation}
+% dove $L$ è la somma dei lati della poligonale.\\
+
+
+\subsection{Correzione degli angoli interni}
+Come anticipato nel paragrafo precedente, occorre ridistribuire l'errore di misura prodotto in tutti gli angoli.\\
+Per fare ciò, in questo caso, è sufficiente sommare il valore di $\lambda$ a quello degli angoli.\\
+I valori finali sono i seguenti:
+\begin{table}[H] \centering
+\begin{tabular}{ccc}
+\toprule
+PUNTO & NOME ANGOLO             & ANG. INT. COMPENSATO (gon) \\
+\midrule
+100   & $\alpha$   & 84.4347                    \\
+200   & $\beta$    & 84.3956                    \\
+300   & $\gamma$   & 100.2613                   \\
+400   & $\delta$   & 231.9705                   \\
+500   & $\epsilon$ & 98.9381                    \\
+\midrule
+\end{tabular}
+\end{table}
+
+\subsection{Calcolo degli angoli azimutali}
+Per semplificare i calcoli, essendo la poligonale di tipo locale, è stato deciso di considerare l'angolo di orientamento ortogonale al segmento che unisce i punti 100 e 200.\\
+Di conseguenza, è possibile conoscere anticipatamente alcune coordinate:
+\begin{equation}\begin{split}
+  &  X_{100}=0  \\ 
+  &  Y_{100}=0  \\
+  &  Y_{200}=0
+\end{split}\end{equation}
+Quindi, essendo l'angolo di orientamento ortogonale al primo segmento della poligonale, ne deriva che $\theta_{100}=100$ gon.\\
+Al fine di conoscere gli angoli azimutali degli altri angoli, occorre effettuare la propagazione degli azimut. Questo procedimento avviene sommando l'azimut dell'angolo precedente, il valore dell'angolo interno considerato e, a seconda che tale somma sia superiore o inferiore a 200 gon, rispettivamente si sottrae o si aggiunge 200 gon.\\
+Per esempio: 
+\begin{equation}
+    (BC)= (AB) + \beta^{'} \pm 200^c
+\end{equation}
+I valori finali degli azimut sono i seguenti:
+\begin{table}[H] \centering
+\begin{tabular}{ccc}
+\toprule
+PUNTO & NOME ANGOLO             & ANG. AZIMUTALE (gon) \\
+\midrule
+100   & $\alpha$   & 100.0000                    \\
+200   & $\beta$    & 384.3956                   \\
+300   & $\gamma$   & 284.6568                   \\
+400   & $\delta$   & 316.6273                   \\
+500   & $\epsilon$ & 215.5653                   \\
+\midrule
+\end{tabular}
+\end{table}
+
+\subsection{Calcolo della distanza orizzontale}
+Al fine di conoscere le distanze orizzontali tra i punti, occorre conoscere la componente orizzontale delle distanze inclinate misurate con la stazione totale.\\
+Per fare ciò, occorre semplicemente moltiplicare la distanza inclinata per il coseno delle lettura al cerchio verticale.\\
+
+\begin{table}[H] \centering
+\begin{tabular}{ccc}
+\toprule
+STAZIONE             & ID PUNTO & DISTANZA ORIZZONTALE (m) \\
+\midrule
+\multirow{2}{*}{100} & Pi 500   & 46.3947                  \\
+                     & Pa 200   & 119.3882                 \\
+\midrule
+\multirow{2}{*}{200} & Pi 100   & 119.3740                 \\
+                     & Pa 300   & 51.8497                  \\
+\midrule
+\multirow{2}{*}{300} & Pi 200   & 51.8571                  \\
+                     & Pa 400   & 61.8759                  \\
+\midrule
+\multirow{2}{*}{400} & Pi 300   & 61.8833                  \\
+                     & Pa 500   & 36.7315                  \\
+\midrule
+\multirow{2}{*}{500} & Pi 400   & 36.7358                  \\
+                     & Pa 100   & 46.4042                  \\
+\bottomrule
+\end{tabular}
+\end{table}
+Essendoci una ridondanza di misure lineari (ogni tratto è stato misurato sia in ``avanti" che ``indietro"), risulta conveniente mediare i valori inerenti agli stessi segmenti, in modo da ridurre gli errori svolti.\\
+Per esempio, è stata mediata la distanza in avanti dalla stazione 100 e la misurazione indietro della stazione 200, poiché entrambi si riferiscono al segmento che unisce i punti 100 e 200.\\
+\begin{table}[H] \centering
+\begin{tabular}{cc}
+\toprule
+SEGMENTI LINEARI & DISTANZA ORIZZONTALE (m) \\
+\midrule
+100-200          & 119.3811                 \\
+200-300          & 51.8534                  \\
+300-400          & 61.8796                  \\
+400-500          & 36.7336                  \\
+500-100          & 46.3994                  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Calcolo delle coordinate parziali}
+Conoscendo i valori delle distanze orizzontali e degli angoli azimutali, è possibile conoscere le componenti x e y dei segmenti che uniscono i punti.\\
+Al fine di conoscere le ascisse parziali di un dato punto, è necessario moltiplicare il seno (o coseno) dell'azimut relativo a quell'angolo ed il segmento che unisce tale punto con il precedente; per esempio:
+\begin{equation} \begin{split}
+   & (x_B)_A = AB \cdot sen(AB) \\
+   & (y_B)_A = AB \cdot cos(AB)
+\end{split}
+\end{equation}
+I calcoli inerenti a questo rilievo topografico hanno riportato i seguenti valori:
+\begin{table}[H] \centering
+\begin{tabular}{ccc}
+\toprule
+ & coord. x (m)       & coord. y (m)       \\
+\midrule
+100 & 0  & 0                \\
+200 & 119.3811 & 0          \\
+300 & -12.5831 & 50.3035    \\
+400 & -60.0911 & -14.7697   \\
+500 & -35.4878 & 9.4854     \\
+500-100 & -11.2319 & -45.0194  \\
+\bottomrule
+\end{tabular}
+\end{table}
+Proprio come per le misure angolari, la somma delle misure delle coordinate parziali (di una poligonale chiusa) dovrebbe risultare pari a 0.\\
+In questo caso, l'errore di chiusura lineare della componente $x$ (ovvero $\pm\delta_x$) è pari a -0.01279 m, mentre per la componente $y$ (ovvero $\pm\delta_y$) è pari a -0.0002 m.\\
+L'errore di chiusura lineare totale si calcola mediante la seguente formula:
+\begin{equation}
+    \Delta = \sqrt{\delta_x^2 + \delta_y^2 } \xrightarrow{} \sqrt{0.01279^2 + 0.0002^2} = 0.0128 \, m
+\end{equation}
+\subsection{Calcolo della tolleranza lineare}
+Come è stato fatto per gli angoli, è necessario conoscere il valore della tolleranza lineare imposta.
+La formula per calcolare tale tolleranza è simile a quella per gli angoli:
+\begin{equation} \label{tolleranza_lineare}
+    T_L = 0^c.025 \cdot\sqrt{L} \xrightarrow{} 0.025 \cdot \sqrt{316.2472} = 0.4446 \,m
+\end{equation}
+dove $L$ rappresenta il perimetro della poligonale.\\
+Essendo il valore $T_L$ inferiore a $\Delta$, è possibile continuare i calcoli, essendo che l'errore di misura prodotto è inferiore rispetto a quello imposto.
+\subsection{Correzione della lunghezza lineare}
+Proprio come per lo studio degli angoli, l'errore di chiusura lineare può essere ridotto andando a ridistribuirlo nei segmenti della poligonale (invertendo il segno). Al contrario degli angoli, dove la distribuzione avviene in modo equo, l'errore lineare viene ponderato con la lunghezza del segmento preso in considerazione.\\
+Per esempio, la correzione delle coordinate parziali avviene mediante la seguente formula:
+\begin{equation} \begin{split}
+   & (x_B)'_A = (x_B)_A \pm \frac{\delta_x}{L} \cdot AB \\
+   & (y_B)'_A = (y_B)_A \pm \frac{\delta_y}{L} \cdot AB
+\end{split}
+\end{equation}
+Le coordinate parziali compensate inerenti a questa relazione sono:
+\begin{table}[H] \centering
+\begin{tabular}{ccc}
+\toprule
+ & coord. x (m)       & coord. y (m)       \\
+\midrule
+100 & 0  & 0                \\
+200 & 119.3763 & 0          \\
+300 & -12.5810 & 50.3035    \\
+400 & -60.0896 & -14.7697   \\
+500 & -35.4750 & 9.4856     \\
+500-100 & -11.2319 & -45.0194  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Calcolo delle coordinate totali}
+Successivamente al calcolo delle coordinate parziali, è possibile ricavare i valori totali delle coordinate.\\
+Per fare ciò, occorre svolgere la sommatoria dei valori delle coordinata $x$ e $y$ dei punti precedenti a quello considerato, per esempio:
+\begin{equation}
+    X_D = x_a' + x_b' + x_c' + x_d'
+\end{equation}
+Le coordinate totali di questa poligonale sono le seguenti:
+\begin{table}[H] \centering
+\begin{tabular}{ccc}
+\toprule
+ & coord. x (m)       & coord. y (m)       \\
+\midrule
+100 & 0  & 0                \\
+200 & 119.3763 & 0          \\
+300 & 106.7953 & 50.3035    \\
+400 & 46.7057 & 35.5339   \\
+500 & 11.2307 & 45.0195     \\
+\bottomrule
+\end{tabular}
+\end{table}
